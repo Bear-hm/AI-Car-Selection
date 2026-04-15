@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "brand": "BYD",
+    "name": "Qin PLUS DM-i",
+    "overview": "入门混动轿车，省油和通勤友好是核心卖点。",
+    "fitUsers": ["预算敏感", "城市通勤", "首次购车", "小家庭"],
+    "notFitUsers": ["特别看重动力", "频繁满载长途"],
+    "highlights": ["油耗友好", "价格门槛低", "配置够用"],
+    "cautions": ["更适合通勤与轻家用", "动力不是强项"],
+    "scenarioNotes": {
+      "commute": "适合日常通勤和成本控制。",
+      "family": "适合轻家用，满载长途一般。"
+    }
+  },
+  {
+    "id": 2,
+    "brand": "Toyota",
+    "name": "Corolla",
+    "overview": "经典家用轿车，主打省心、稳定和维护便利。",
+    "fitUsers": ["通勤用户", "保守型家用用户", "重视稳定性"],
+    "notFitUsers": ["特别看重空间", "追求智能配置"],
+    "highlights": ["可靠省心", "维护成本稳", "适合代步"],
+    "cautions": ["空间不算突出", "智能体验偏基础"],
+    "scenarioNotes": {
+      "commute": "适合长期稳定通勤。",
+      "family": "轻家用合适，大空间需求建议对比别的车。"
+    }
+  },
+  {
+    "id": 3,
+    "brand": "Nissan",
+    "name": "Sylphy",
+    "overview": "舒适取向明显的家用轿车，空间和代步之间较均衡。",
+    "fitUsers": ["家用代步", "舒适取向", "预算务实"],
+    "notFitUsers": ["追求强动力", "追求高级智能"],
+    "highlights": ["座舱舒适", "空间不错", "成本友好"],
+    "cautions": ["动力偏温和", "科技感一般"],
+    "scenarioNotes": {
+      "commute": "通勤和家用切换自然。",
+      "family": "后排表现比很多同级轿车更稳。"
+    }
+  },
+  {
+    "id": 4,
+    "brand": "Tesla",
+    "name": "Model 3",
+    "overview": "智能体验很强的纯电轿车，但更依赖预算和充电条件。",
+    "fitUsers": ["重视智能", "接受纯电", "预算较高"],
+    "notFitUsers": ["无充电条件", "特别看重性价比"],
+    "highlights": ["智能体验强", "驾驶感鲜明", "通勤成本低"],
+    "cautions": ["预算压力较高", "空间不是强项", "依赖充电"],
+    "scenarioNotes": {
+      "commute": "有充电条件时通勤体验优秀。",
+      "travel": "长途需要提前规划补能。"
+    }
+  },
+  {
+    "id": 5,
+    "brand": "Volkswagen",
+    "name": "Lavida",
+    "overview": "传统家用路线的务实轿车，价格和空间都比较均衡。",
+    "fitUsers": ["预算务实", "家庭代步", "看重稳定使用"],
+    "notFitUsers": ["追求强智能", "追求激进动力"],
+    "highlights": ["价格覆盖广", "空间够用", "上手门槛低"],
+    "cautions": ["动力和科技感都比较常规"],
+    "scenarioNotes": {
+      "commute": "适合作为稳定代步工具。",
+      "family": "适合预算敏感的基础家用。"
+    }
+  },
+  {
+    "id": 6,
+    "brand": "Honda",
+    "name": "Accord e:PHEV",
+    "overview": "中型混动轿车，空间和长途舒适性都比较稳。",
+    "fitUsers": ["预算略高", "兼顾通勤和长途", "重视舒适性"],
+    "notFitUsers": ["预算非常严格", "只追求最低成本"],
+    "highlights": ["空间舒适", "长途表现稳", "混动经济性不错"],
+    "cautions": ["价格高于入门家用车", "更适合作为升级选项"],
+    "scenarioNotes": {
+      "travel": "长途舒适和补能灵活性都不错。",
+      "family": "适合更在意品质感的家庭用户。"
+    }
+  },
+  {
+    "id": 7,
+    "brand": "BYD",
+    "name": "Song PLUS DM-i",
+    "overview": "典型的家用混动SUV，覆盖面广，短板相对少。",
+    "fitUsers": ["家用优先", "混合场景", "想要SUV空间", "想兼顾能耗"],
+    "notFitUsers": ["完全不接受充电相关使用习惯"],
+    "highlights": ["空间够用", "混动经济性好", "配置均衡", "适配面广"],
+    "cautions": ["价格比纯燃油同级略高", "更适合接受新能源思路的用户"],
+    "scenarioNotes": {
+      "family": "家庭用户命中率很高。",
+      "travel": "长途和周末出游都比较稳。"
+    }
+  },
+  {
+    "id": 8,
+    "brand": "Haval",
+    "name": "H6",
+    "overview": "务实的大众化家用SUV，空间和价格优势明显。",
+    "fitUsers": ["预算有限", "想要SUV空间", "传统燃油用户"],
+    "notFitUsers": ["特别在意动力", "强智能偏好用户"],
+    "highlights": ["空间实用", "价格友好", "家用属性明确"],
+    "cautions": ["动力和科技感不是核心卖点"],
+    "scenarioNotes": {
+      "family": "适合追求实用和性价比的家庭用户。",
+      "travel": "短中途出游够用，长途动力一般。"
+    }
+  },
+  {
+    "id": 9,
+    "brand": "Toyota",
+    "name": "RAV4",
+    "overview": "可靠耐用路线的合资SUV，家用和长途适配度都不错。",
+    "fitUsers": ["家用稳定派", "重视品牌和可靠性", "长途需求用户"],
+    "notFitUsers": ["特别在意智能体验", "只追求低预算"],
+    "highlights": ["可靠性稳", "空间合格", "混动油耗表现好"],
+    "cautions": ["配置感较传统", "价格不算低"],
+    "scenarioNotes": {
+      "family": "适合追求省心和稳定的家庭用户。",
+      "travel": "长途出行补能压力小。"
+    }
+  },
+  {
+    "id": 10,
+    "brand": "Tesla",
+    "name": "Model Y",
+    "overview": "智能和空间兼顾的纯电SUV，但预算和充电要求更高。",
+    "fitUsers": ["有充电条件", "追求智能", "预算20万以上"],
+    "notFitUsers": ["无充电条件", "特别看重购车性价比"],
+    "highlights": ["空间强", "智能化强", "纯电成本低"],
+    "cautions": ["预算压力明显", "体验依赖补能条件"],
+    "scenarioNotes": {
+      "family": "适合预算充足且接受纯电的家庭用户。",
+      "travel": "长途要结合补能网络判断。"
+    }
+  },
+  {
+    "id": 11,
+    "brand": "Li Auto",
+    "name": "L7",
+    "overview": "舒适和智能路线的中大型家用SUV，更适合高预算场景。",
+    "fitUsers": ["预算充足", "重视智能舒适", "家庭出游频繁"],
+    "notFitUsers": ["预算严格", "更看重用车成本"],
+    "highlights": ["空间大", "智能强", "家庭舒适性好"],
+    "cautions": ["购车和使用成本都偏高"],
+    "scenarioNotes": {
+      "family": "适合对舒适和科技体验要求高的家庭。",
+      "travel": "长途与多人乘坐体验较强。"
+    }
+  },
+  {
+    "id": 12,
+    "brand": "Xpeng",
+    "name": "G6",
+    "overview": "智能标签明显的纯电SUV，在20万附近有较强体验感。",
+    "fitUsers": ["重视智能", "接受纯电", "追求新势力体验"],
+    "notFitUsers": ["无充电条件", "对纯电保守"],
+    "highlights": ["辅助驾驶和车机体验强", "空间够用", "纯电通勤成本低"],
+    "cautions": ["依赖充电条件", "预算压力高于传统家用车"],
+    "scenarioNotes": {
+      "commute": "有充电条件时非常适合通勤。",
+      "family": "家庭使用没有明显短板，但要接受纯电逻辑。"
+    }
+  },
+  {
+    "id": 13,
+    "brand": "Buick",
+    "name": "GL8",
+    "overview": "经典商务兼家用MPV，空间优势明显，但成本不低。",
+    "fitUsers": ["多人家庭", "频繁长途", "商务接待"],
+    "notFitUsers": ["预算有限", "单人通勤为主"],
+    "highlights": ["空间强", "满员舒适性好", "多人出行优势明显"],
+    "cautions": ["购车和用车成本都不低", "不适合小场景代步"],
+    "scenarioNotes": {
+      "family": "多人家庭和老人小孩同行时优势明显。",
+      "travel": "长途乘坐舒适性很强。"
+    }
+  },
+  {
+    "id": 14,
+    "brand": "GAC Trumpchi",
+    "name": "M8",
+    "overview": "偏家用升级路线的MPV，空间很强，预算带宽也较大。",
+    "fitUsers": ["多人家庭", "注重空间", "想兼顾智能体验"],
+    "notFitUsers": ["主要城市单人通勤", "对车身尺寸敏感"],
+    "highlights": ["空间强", "家用属性明确", "智能和价值感较均衡"],
+    "cautions": ["车身大，城市灵活性一般", "后期成本高于普通家用车"],
+    "scenarioNotes": {
+      "family": "适合二胎、多孩或多人家庭。",
+      "travel": "长途舒适和装载能力都很突出。"
+    }
+  },
+  {
+    "id": 15,
+    "brand": "Denza",
+    "name": "D9 DM-i",
+    "overview": "高预算家用MPV代表，空间和智能都很强，但门槛较高。",
+    "fitUsers": ["预算高", "多人家庭", "重视智能和舒适"],
+    "notFitUsers": ["预算严格", "只想做日常代步"],
+    "highlights": ["空间强", "智能强", "多人出行体验优秀"],
+    "cautions": ["价格高", "更适合作为高阶家庭用车"],
+    "scenarioNotes": {
+      "family": "多人家庭场景命中率很高。",
+      "travel": "长途舒适性和高级感都比较强。"
+    }
+  }
+]
