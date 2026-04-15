@@ -70,12 +70,17 @@ async function buildRecommendation({ user, topK = 3 }) {
     retrieval
   })
 
+  const carInsights = ai.carInsights || []
+
   return {
     user: normalizedUser,
-    topCars: topCars.map(shapeCar),
+    topCars: topCars.map((car, index) => ({
+      ...shapeCar(car),
+      insight: carInsights[index] || ''
+    })),
     candidates: candidates.map(shapeCar),
     retrieval,
-    ai,
+    ai: (({ nextQuestions, ...rest }) => rest)(ai),
     generatedAt: new Date().toISOString()
   }
 }

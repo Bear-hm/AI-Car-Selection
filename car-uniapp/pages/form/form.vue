@@ -213,7 +213,7 @@
     </scroll-view>
 
     <view class="footer">
-      <button class="submit-button" @click="submitForm">{{ textMap.submitButton }}</button>
+      <button class="submit-button" :loading="submitting" @click="submitForm">{{ textMap.submitButton }}</button>
     </view>
   </view>
 </template>
@@ -223,75 +223,76 @@ export default {
   name: 'CarFormPage',
   data() {
     return {
+      submitting: false,
       textMap: {
-        heroBadge: '\u667a\u80fd\u9009\u8f66',
-        heroNote: '\u9898\u5361\u5f0f\u95ee\u5377',
-        title: '\u9009\u8f66\u9700\u6c42\u8868\u5355',
-        description: '\u50cf\u586b\u5199\u4e00\u4efd\u8f7b\u95ee\u5377\u4e00\u6837\uff0c\u9010\u9898\u9009\u62e9\u4f60\u7684\u9700\u6c42\uff0c\u7cfb\u7edf\u4f1a\u636e\u6b64\u7ed9\u51fa\u66f4\u5408\u9002\u7684\u8f66\u578b\u63a8\u8350\u3002',
-        progressLabel: '\u5df2\u786e\u8ba4',
-        cardTip: '\u70b9\u51fb\u6bcf\u4e2a\u9009\u9879\u5361\u7247\u5373\u53ef\u5b8c\u6210\u9009\u62e9',
-        budgetLabel: '\u9884\u7b97\u8303\u56f4',
-        usageLabel: '\u7528\u9014',
-        peopleLabel: '\u4eba\u6570',
-        chargeLabel: '\u662f\u5426\u6709\u5145\u7535\u6761\u4ef6',
-        priorityLabel: '\u66f4\u770b\u91cd',
-        carTypeLabel: '\u504f\u597d\u8f66\u578b',
-        energyLabel: '\u504f\u597d\u80fd\u6e90',
-        budgetHint: '\u5148\u9009\u5b9a\u4e00\u4e2a\u5927\u81f4\u8d2d\u8f66\u9884\u7b97\u533a\u95f4',
-        usageHint: '\u8fd9\u53f0\u8f66\u6700\u5e38\u7528\u6765\u505a\u4ec0\u4e48',
-        peopleHint: '\u4f60\u5e73\u65f6\u6700\u5e38\u89c1\u7684\u4e58\u5750\u4eba\u6570',
-        chargeHint: '\u8fd9\u4f1a\u76f4\u63a5\u5f71\u54cd\u65b0\u80fd\u6e90\u8f66\u578b\u7684\u53ef\u7528\u6027',
-        priorityHint: '\u8bf7\u9009\u4e00\u4e2a\u4f60\u73b0\u5728\u6700\u5728\u610f\u7684\u65b9\u5411',
-        carTypeHint: '\u9009\u62e9\u4f60\u66f4\u60f3\u8981\u7684\u8f66\u8eab\u5f62\u6001',
-        energyHint: '\u9009\u62e9\u4f60\u66f4\u504f\u597d\u7684\u52a8\u529b\u65b9\u5f0f',
-        question1: '\u7b2c 1 \u9898',
-        question2: '\u7b2c 2 \u9898',
-        question3: '\u7b2c 3 \u9898',
-        question4: '\u7b2c 4 \u9898',
-        question5: '\u7b2c 5 \u9898',
-        question6: '\u7b2c 6 \u9898',
-        question7: '\u7b2c 7 \u9898',
-        submitButton: '\u5f00\u59cb\u63a8\u8350',
-        chargeYes: '\u6709',
-        chargeNo: '\u6ca1\u6709'
+        heroBadge: '智能选车',
+        heroNote: '卡片式问卷',
+        title: '选车需求表单',
+        description: '像填写一份轻问卷一样，逐题选择你的需求，系统会据此给出更合适的车型推荐。',
+        progressLabel: '已确认',
+        cardTip: '点击每个选项卡片即可完成选择',
+        budgetLabel: '预算范围',
+        usageLabel: '用途',
+        peopleLabel: '人数',
+        chargeLabel: '是否有充电条件',
+        priorityLabel: '更看重',
+        carTypeLabel: '偏好车型',
+        energyLabel: '偏好能源',
+        budgetHint: '先选定一个大致购车预算区间',
+        usageHint: '这台车最常用来做什么',
+        peopleHint: '你平时最常见的乘坐人数',
+        chargeHint: '这会直接影响新能源车型的可用性',
+        priorityHint: '请选一个你现在最在意的方向',
+        carTypeHint: '选择你更想要的车身形态',
+        energyHint: '选择你更偏好的动力方式',
+        question1: '第 1 题',
+        question2: '第 2 题',
+        question3: '第 3 题',
+        question4: '第 4 题',
+        question5: '第 5 题',
+        question6: '第 6 题',
+        question7: '第 7 题',
+        submitButton: '开始推荐',
+        chargeYes: '有',
+        chargeNo: '没有'
       },
       budgetOptions: [
-        { label: '10\u4e07\u4ee5\u4e0b', value: 'under_10' },
-        { label: '10-15\u4e07', value: '10_15' },
-        { label: '15-20\u4e07', value: '15_20' },
-        { label: '20\u4e07\u4ee5\u4e0a', value: 'over_20' }
+        { label: '10万以下', value: 'under_10' },
+        { label: '10-15万', value: '10_15' },
+        { label: '15-20万', value: '15_20' },
+        { label: '20万以上', value: 'over_20' }
       ],
       usageOptions: [
-        { label: '\u901a\u52e4', value: 'commute' },
-        { label: '\u5bb6\u7528', value: 'family' },
-        { label: '\u957f\u9014', value: 'travel' },
-        { label: '\u6df7\u5408', value: 'mixed' }
+        { label: '通勤', value: 'commute' },
+        { label: '家用', value: 'family' },
+        { label: '长途', value: 'travel' },
+        { label: '混合', value: 'mixed' }
       ],
       peopleOptions: [
-        { label: '1-2\u4eba', value: '1_2' },
-        { label: '3-4\u4eba', value: '3_4' },
-        { label: '5\u4eba\u4ee5\u4e0a', value: '5_plus' }
+        { label: '1-2人', value: '1_2' },
+        { label: '3-4人', value: '3_4' },
+        { label: '5人以上', value: '5_plus' }
       ],
       chargeOptions: [
-        { label: '\u6709\uff0c\u53ef\u4ee5\u5145\u7535', value: true },
-        { label: '\u6ca1\u6709\uff0c\u4e0d\u592a\u65b9\u4fbf\u5145\u7535', value: false }
+        { label: '有，可以充电', value: true },
+        { label: '没有，不太方便充电', value: false }
       ],
       priorityOptions: [
-        { label: '\u7701\u94b1', value: 'value' },
-        { label: '\u7701\u6cb9', value: 'fuel_economy' },
-        { label: '\u7a7a\u95f4', value: 'space' },
-        { label: '\u667a\u80fd', value: 'smart' }
+        { label: '省钱', value: 'value' },
+        { label: '省油', value: 'fuel_economy' },
+        { label: '空间', value: 'space' },
+        { label: '智能', value: 'smart' }
       ],
       carTypeOptions: [
-        { label: '\u8f7f\u8f66', value: 'sedan' },
+        { label: '轿车', value: 'sedan' },
         { label: 'SUV', value: 'suv' },
-        { label: '\u65e0\u6240\u8c13', value: 'any' }
+        { label: '无所谓', value: 'any' }
       ],
       energyOptions: [
-        { label: '\u71c3\u6cb9', value: 'fuel' },
-        { label: '\u6df7\u52a8', value: 'hybrid' },
-        { label: '\u7eaf\u7535', value: 'electric' },
-        { label: '\u65e0\u6240\u8c13', value: 'any' }
+        { label: '燃油', value: 'fuel' },
+        { label: '混动', value: 'hybrid' },
+        { label: '纯电', value: 'electric' },
+        { label: '无所谓', value: 'any' }
       ],
       touchedMap: {
         budget: false,
@@ -314,9 +315,6 @@ export default {
     }
   },
   computed: {
-    budgetLabels() {
-      return this.budgetOptions.map(item => item.label)
-    },
     questionCount() {
       return 7
     },
@@ -366,7 +364,10 @@ export default {
       const matchedItem = options.find(item => item.value === value)
       return matchedItem ? matchedItem.label : ''
     },
-    submitForm() {
+    async submitForm() {
+      if (this.submitting) return
+      this.submitting = true
+
       const selectedBudget = this.budgetOptions[this.formData.budgetIndex]
 
       const submitData = {
@@ -385,11 +386,42 @@ export default {
         energyLabel: this.getLabel(this.energyOptions, this.formData.energy)
       }
 
-      uni.setStorageSync('carFormData', submitData)
+      try {
+        uni.showLoading({ title: 'AI 推荐中...', mask: true })
 
-      uni.navigateTo({
-        url: '/pages/result/result'
-      })
+        // uni.request async 模式实际返回 { statusCode, data }，类型声明不完整需做断言
+        interface RequestResponse {
+          statusCode: number
+          data: { success: boolean; data: any; message?: string }
+        }
+        const response = (await uni.request({
+          url: 'http://localhost:3000/api/recommend',
+          method: 'POST',
+          header: { 'Content-Type': 'application/json' },
+          data: { user: submitData, topK: 3 }
+        })) as RequestResponse
+
+        uni.hideLoading()
+
+        if (response.statusCode === 200 && response.data.success) {
+          uni.setStorageSync('carRecommendResult', response.data.data)
+          uni.navigateTo({ url: '/pages/result/result' })
+        } else {
+          uni.showToast({
+            title: response.data?.message || '推荐失败',
+            icon: 'none'
+          })
+        }
+      } catch (e) {
+        uni.hideLoading()
+        uni.showToast({
+          title: '无法连接后端服务，请确认后端已启动',
+          icon: 'none',
+          duration: 3000
+        })
+      } finally {
+        this.submitting = false
+      }
     }
   }
 }

@@ -64,7 +64,10 @@ function buildRecommendationPrompt({ user, topCars, retrieval }) {
     buildKnowledgeText(retrieval),
     '',
     '请输出 JSON，对象字段必须包含:',
-    'summary, highlights, cautions, compare, nextQuestions'
+    'summary, highlights, cautions, compare, carInsights',
+    '',
+    'carInsights 为数组，数组第 N 项对应候选第 N 辆车的个性化解读。',
+    '每条解读应包含 2-3 句话，从用户画像出发说明为何推荐这台车，结合知识片段提及 1-2 个具体优点，并指出 1 个需要注意的点。'
   ].join('\n')
 
   return {

@@ -1,15 +1,58 @@
 <template>
   <view class="page">
-    <view class="content-card">
-      <view v-if="formData" class="recommend-card">
-        <view class="section-head">
-          <text class="section-title">{{ textMap.recommendTitle }}</text>
-          <text class="section-tip">{{ textMap.recommendTip }}</text>
+    <view class="page-header">
+      <view class="header-top">
+        <text class="header-title">推荐结果</text>
+        <text class="header-subtitle">{{ formData?.budgetLabel }} · {{ formData?.usageLabel }}</text>
+      </view>
+    </view>
+
+    <scroll-view scroll-y class="content-scroll">
+
+      <!-- AI 智能解读 -->
+      <view v-if="aiData" class="ai-summary-card">
+        <view class="ai-summary-header">
+          <text class="ai-summary-icon">AI</text>
+          <text class="ai-summary-title">智能解读</text>
+          <view v-if="aiData.mode" class="ai-mode-tag">
+            <text class="ai-mode-text">{{ aiData.mode === 'llm' ? '大模型生成' : '规则生成' }}</text>
+          </view>
+        </view>
+        <text class="ai-summary-text">{{ aiData.summary }}</text>
+
+        <!-- 亮点 -->
+        <view v-if="aiData.highlights?.length" class="ai-section">
+          <text class="ai-section-title">亮点</text>
+          <view class="ai-tag-list">
+            <text v-for="(item, i) in aiData.highlights" :key="i" class="ai-tag ai-tag--highlight">{{ item }}</text>
+          </view>
         </view>
 
-        <view v-if="recommendedCars.length" class="car-list">
+        <!-- 注意事项 -->
+        <view v-if="aiData.cautions?.length" class="ai-section">
+          <text class="ai-section-title">注意</text>
+          <view class="ai-tag-list">
+            <text v-for="(item, i) in aiData.cautions" :key="i" class="ai-tag ai-tag--caution">{{ item }}</text>
+          </view>
+        </view>
+
+        <!-- 车型对比 -->
+        <view v-if="aiData.compare" class="ai-section">
+          <text class="ai-section-title">对比参考</text>
+          <text class="ai-compare-text">{{ aiData.compare }}</text>
+        </view>
+      </view>
+
+      <!-- 推荐车型列表 -->
+      <view v-if="topCars.length" class="car-section">
+        <view class="car-section-head">
+          <text class="car-section-title">为你推荐</text>
+          <text class="car-section-tip">按匹配度排序</text>
+        </view>
+
+        <view class="car-list">
           <view
-            v-for="(car, index) in recommendedCars"
+            v-for="(car, index) in topCars"
             :key="car.id"
             class="car-card"
             :class="{ 'car-card--top': index === 0 }"
@@ -22,53 +65,43 @@
                 <text class="car-brand">{{ car.brand }}</text>
                 <view class="car-title-row">
                   <text class="car-name">{{ car.name }}</text>
-                  <text class="car-price">{{ car.priceText }}</text>
+                  <text class="car-price">{{ car.priceMin }}-{{ car.priceMax }}万</text>
                 </view>
 
                 <view class="tag-row">
                   <text class="car-tag car-tag--recommend">{{ car.matchText }}</text>
-                  <text class="car-tag car-tag--scene">{{ formData.usageLabel }}</text>
-                  <text class="car-tag car-tag--neutral">{{ formData.priorityLabel }}</text>
-                  <text class="car-tag car-tag--neutral">{{ car.typeLabel }}</text>
                 </view>
 
-                <text class="car-reason">
-                  {{ textMap.reasonLabel }}{{ car.reasonText }}
-                </text>
+                <view v-if="car.insight" class="car-insight">
+                  <text class="car-insight-text">{{ car.insight }}</text>
+                </view>
               </view>
             </view>
           </view>
         </view>
-
-        <view v-else class="empty-card">
-          <text class="empty-text">{{ textMap.noCar }}</text>
-        </view>
       </view>
 
-      <view v-else class="empty-card">
+      <!-- 无数据 -->
+      <view v-if="!topCars.length && !aiData" class="empty-card">
         <text class="empty-text">{{ textMap.empty }}</text>
+        <button class="retry-button" @click="goBack">返回修改</button>
       </view>
-    </view>
+
+    </scroll-view>
   </view>
 </template>
 
 <script>
-import carsData from '../../data/cars.json'
-import { getCarEnergyLabel, getCarTypeLabel, scoreCars } from '../../utils/scorer'
-
 export default {
   name: 'CarResultPage',
   data() {
     return {
       formData: null,
-      recommendedCars: [],
+      topCars: [],
+      aiData: null,
       textMap: {
-        empty: '\u6682\u672a\u83b7\u53d6\u5230\u9009\u8f66\u9700\u6c42\uff0c\u8bf7\u5148\u8fd4\u56de\u586b\u5199\u8868\u5355\u3002',
-        recommendTitle: '\u63a8\u8350\u8f66\u578b',
-        recommendTip: '\u9884\u7b97\u5185\u8f66\u578b\u4f1a\u4f18\u5148\u63a8\u8350\uff0c\u9884\u7b97\u7565\u8d85\u4f46\u6574\u4f53\u5408\u9002\u7684\u8f66\u578b\u4f1a\u4f5c\u4e3a\u5f31\u63a8\u8350\u51fa\u73b0',
-        reasonLabel: '\u63a8\u8350\u7406\u7531\uff1a',
-        scoreUnit: '\u5206',
-        noCar: '\u6682\u65f6\u6ca1\u6709\u627e\u5230\u5408\u9002\u7684\u8f66\u578b\uff0c\u4f60\u53ef\u4ee5\u8fd4\u56de\u8c03\u6574\u4e00\u4e0b\u7b5b\u9009\u6761\u4ef6\u3002'
+        scoreUnit: '分',
+        empty: '暂无推荐结果，请返回重新填写。'
       }
     }
   },
@@ -77,38 +110,21 @@ export default {
   },
   methods: {
     loadResult() {
-      const storedData = uni.getStorageSync('carFormData')
-      this.formData = storedData && Object.keys(storedData).length ? storedData : null
+      const result = uni.getStorageSync('carRecommendResult')
 
-      if (!this.formData) {
-        this.recommendedCars = []
+      if (!result) {
+        this.topCars = []
+        this.aiData = null
+        this.formData = null
         return
       }
 
-      this.recommendedCars = scoreCars(this.formData, carsData)
-        .map(car => ({
-          ...car,
-          priceText: car.priceMin + '-' + car.priceMax + '\u4e07',
-          typeLabel: getCarTypeLabel(car.type),
-          energyLabel: getCarEnergyLabel(car.energy),
-          seatsText: car.seats + '\u5ea7',
-          reasonText: this.buildReasonText(car)
-        }))
-        .slice(0, 3)
+      this.formData = result.user || null
+      this.topCars = result.topCars || []
+      this.aiData = result.ai || null
     },
-    buildReasonText(car) {
-      const keywordParts: string[] = []
-
-      if (car.reasons && car.reasons.length) {
-        keywordParts.push(...car.reasons)
-      }
-
-      keywordParts.push(car.typeLabel)
-      keywordParts.push(car.energyLabel)
-      keywordParts.push(car.seatsText)
-
-      const uniqueParts = keywordParts.filter((item, index) => item && keywordParts.indexOf(item) === index)
-      return uniqueParts.join(' / ')
+    goBack() {
+      uni.navigateBack()
     }
   }
 }
@@ -121,41 +137,167 @@ page {
 
 .page {
   min-height: 100vh;
-  padding: 28rpx 24rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding-top: calc(var(--status-bar-height) + 18rpx);
+  padding-bottom: 24rpx;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  background: linear-gradient(180deg, #eff6ff 0%, #f5f7fa 100%);
+  box-shadow: 0 4rpx 20rpx rgba(15, 23, 42, 0.06);
+}
+
+.header-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.header-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.header-subtitle {
+  font-size: 26rpx;
+  color: #64748b;
+}
+
+.content-scroll {
+  flex: 1;
+  margin-top: calc(var(--status-bar-height) + 18rpx + 44rpx + 24rpx + 24rpx);
+  padding: 24rpx 24rpx 60rpx;
   box-sizing: border-box;
 }
 
-.content-card {
-  padding: 0;
+/* AI 智能解读卡片 */
+.ai-summary-card {
+  padding: 32rpx 28rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #2563eb 100%);
+  box-shadow: 0 20rpx 48rpx rgba(37, 99, 235, 0.2);
+  margin-bottom: 28rpx;
 }
 
-.recommend-card,
-.empty-card {
-  margin-top: 0;
+.ai-summary-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
 }
 
-.recommend-card {
-  padding: 0;
+.ai-summary-icon {
+  padding: 6rpx 14rpx;
+  border-radius: 8rpx;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 20rpx;
+  font-weight: 700;
 }
 
-.section-head {
-  padding: 12rpx 10rpx 24rpx;
-  margin-bottom: 12rpx;
+.ai-summary-title {
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
 }
 
-.section-title {
+.ai-mode-tag {
+  margin-left: auto;
+  padding: 6rpx 14rpx;
+  border-radius: 8rpx;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ai-mode-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 20rpx;
+}
+
+.ai-summary-text {
   display: block;
-  font-size: 40rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 1.8;
+}
+
+.ai-section {
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ai-section-title {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 22rpx;
+  font-weight: 600;
+  margin-bottom: 14rpx;
+  letter-spacing: 1rpx;
+}
+
+.ai-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.ai-tag {
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.ai-tag--highlight {
+  background: rgba(16, 185, 129, 0.25);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.ai-tag--caution {
+  background: rgba(251, 191, 36, 0.25);
+  color: #fde68a;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.ai-compare-text {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 26rpx;
+  line-height: 1.7;
+}
+
+/* 车型列表 */
+.car-section {
+  margin-top: 8rpx;
+}
+
+.car-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4rpx 20rpx;
+}
+
+.car-section-title {
+  font-size: 36rpx;
   font-weight: 700;
   color: #111827;
 }
 
-.section-tip {
-  display: block;
-  margin-top: 12rpx;
-  font-size: 24rpx;
-  line-height: 1.6;
-  color: #6b7280;
+.car-section-tip {
+  font-size: 22rpx;
+  color: #94a3b8;
 }
 
 .car-list {
@@ -175,6 +317,7 @@ page {
 
 .car-card--top {
   box-shadow: 0 18rpx 42rpx rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.1);
 }
 
 .top-badge {
@@ -253,22 +396,19 @@ page {
   color: #1d4ed8;
 }
 
-.car-tag--scene {
-  background-color: #dcfce7;
-  color: #15803d;
-}
-
-.car-tag--neutral {
-  background-color: #f1f5f9;
-  color: #475569;
-}
-
-.car-reason {
-  display: block;
+.car-insight {
   margin-top: 22rpx;
-  font-size: 24rpx;
-  line-height: 1.7;
-  color: #64748b;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  background-color: #f8fafc;
+  border-left: 4rpx solid #2563eb;
+}
+
+.car-insight-text {
+  display: block;
+  color: #475569;
+  font-size: 26rpx;
+  line-height: 1.8;
 }
 
 .score-badge {
@@ -292,16 +432,36 @@ page {
   color: #2563eb;
 }
 
+/* 空状态 */
 .empty-card {
-  padding: 32rpx 24rpx;
+  padding: 80rpx 40rpx;
   border-radius: 24rpx;
   background-color: #ffffff;
   box-shadow: 0 14rpx 36rpx rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32rpx;
 }
 
 .empty-text {
   font-size: 28rpx;
   color: #64748b;
   line-height: 1.7;
+  text-align: center;
+}
+
+.retry-button {
+  padding: 20rpx 48rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+  box-shadow: 0 12rpx 24rpx rgba(37, 99, 235, 0.2);
+}
+
+.retry-button::after {
+  border: none;
 }
 </style>

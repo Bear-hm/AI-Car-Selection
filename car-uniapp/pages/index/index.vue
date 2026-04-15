@@ -7,18 +7,56 @@
         根据你的预算、用途和偏好，智能推荐适合你的车型
       </text>
       <button class="start-button" @click="goToForm">开始选车</button>
+
+      <!-- <button class="debug-button" :loading="loading" @click="testApi">测试接口</button> -->
     </view>
   </view>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      loading: false
+    }
+  },
   methods: {
     goToForm() {
       uni.navigateTo({
         url: '/pages/form/form'
       })
     }
+    // async testApi() {
+    //   this.loading = true
+    //   const sampleUser = {
+    //     budgetRange: '10_15',
+    //     budgetLabel: '10-15万',
+    //     usage: 'family',
+    //     usageLabel: '家用',
+    //     people: '3_4',
+    //     peopleLabel: '3-4人',
+    //     chargeRequired: true,
+    //     priority: 'space',
+    //     priorityLabel: '空间',
+    //     carType: 'suv',
+    //     carTypeLabel: 'SUV',
+    //     energy: 'hybrid',
+    //     energyLabel: '混动'
+    //   }
+    //   try {
+    //     const response = await uni.request({
+    //       url: 'http://localhost:3000/api/recommend',
+    //       method: 'POST',
+    //       header: { 'Content-Type': 'application/json' },
+    //       data: { user: sampleUser, topK: 3 }
+    //     })
+    //     console.log('API 返回:', response.data)
+    //   } catch (e) {
+    //     console.error('请求失败:', e)
+    //   } finally {
+    //     this.loading = false
+    //   }
+    // }
   }
 }
 </script>
@@ -88,4 +126,21 @@ page {
 .start-button::after {
   border: none;
 }
+
+/* .debug-button {
+  width: 100%;
+  margin-top: 32rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
+  height: 96rpx;
+  line-height: 96rpx;
+  box-shadow: 0 16rpx 32rpx rgba(16, 185, 129, 0.22);
+}
+
+.debug-button::after {
+  border: none;
+} */
 </style>
